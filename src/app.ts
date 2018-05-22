@@ -3,15 +3,18 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
 import { UserController } from './controller/user';
+import * as config from 'config';
 
 import { Server } from 'http';
+// import { AddressInfo } from 'net';
 const app = express();
 const server = new Server(app);
 
-const port:number = 3000;
+// const port:number = 3000;
+let port = server.listen(config.get("port"));
 
 server.listen(port);
-console.log(`server start on port ${port}`);
+console.log(`server start on port ${port.address()["port"]}`);
 
 
 app.use(cors());
