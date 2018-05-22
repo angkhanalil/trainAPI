@@ -1,14 +1,19 @@
 import { Router, Request, Response } from 'express';
-import { mysqlDB } from '../shared/mysql-db';
+// import { mysqlDB } from '../shared/mysql-db';
+import {jwt} from '../shared/auth';
+import {UserService} from '../shared/user';
 
 const router = Router();
 
-router.get('', (req: Request, res: Response) => {
-    console.log("xxxxxx");
-    mysqlDB.query('select * from sc_user', (err, result) => {
-        console.log(err);
+router.get('',jwt.authenticate(), (req: Request, res: Response) => {
+    UserService.list((err,result)=>{
         res.json(result);
-    });
+    })
+    // mysqlDB.query('select * from sc_user', (err, result) => {
+        
+    //     console.log(err);
+    //     res.json(result);
+    // });
 
 });
 

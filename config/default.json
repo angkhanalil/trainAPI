@@ -7,5 +7,9 @@
         "database": "issue_db",
         "connectionLimit": 10,
         "multipleStatements": true
+    },
+    "TOKEN_KEY": "123456789",
+    "JWT_SESSION": {
+        "session": false
     }
 }
