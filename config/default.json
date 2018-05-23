@@ -11,5 +11,6 @@
     "TOKEN_KEY": "123456789",
     "JWT_SESSION": {
         "session": false
-    }
+    },
+    "UPLOAD_PATH": "uploads/"
 }

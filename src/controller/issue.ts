@@ -2,8 +2,26 @@ import { Router, Request, Response } from 'express';
 // import { mysqlDB } from '../shared/mysql-db';
 import * as excel from 'excel4node';
 import { UserService } from '../shared/user';
+import * as multer from 'multer';
+import * as config from 'config';
+import * as nodemailer from 'nodemailer';
 
 const router = Router();
+
+const diskStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, config.get("UPLOAD_PATH"))
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now + "-" + file.originalname)
+    }
+})
+
+const upload = multer({ storage: diskStorage })
+
+// const upload = multer({
+//     dest: config.get("UPLOAD_PATH")
+// });
 
 router.get('/excel', (req: Request, res: Response) => {
 
@@ -32,6 +50,37 @@ router.get('/excel', (req: Request, res: Response) => {
     //         bold: true
     //     }
     // });
+
+});
+
+
+router.post("/attach/:id", upload.single("attach"), (req: Request, res: Response) => {
+    res.json({
+        success: true
+    });
+});
+
+router.post("/sendEmail/:id", (req: Request, res: Response) => {
+    let email = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+            user: "training.pnpsolution@gmail.com",
+            pass: "training1234.pnp"
+        }
+    });
+
+    email.sendMail({
+        subject: "Hello from node.js",
+        to:"angkhana.lil94@gmail.com",
+        html:"<b>Hello from node.js</b>",
+        attachments:[{
+            path:"uploads/issue.xlsx"
+        }]
+    }, (err, result) => {
+        res.json({
+            success: true
+        })
+    })
 
 });
 
